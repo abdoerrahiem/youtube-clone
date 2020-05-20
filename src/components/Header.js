@@ -54,7 +54,7 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   header: {
-    marginTop: Constant.statusBarHeight,
+    //marginTop: Constant.statusBarHeight,
     height: 45,
     flexDirection: 'row',
     justifyContent: 'space-between',

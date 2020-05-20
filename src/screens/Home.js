@@ -1,10 +1,17 @@
 import React, { useContext, useEffect } from 'react'
-import { View, Text, FlatList, StyleSheet } from 'react-native'
+import { View, Text, FlatList, StyleSheet, Animated } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import Context from '../context/Context'
 
 import Header from '../components/Header'
 import Card from '../components/Card'
+
+const scrollY = new Animated.Value(0)
+const diffClamp = Animated.diffClamp(scrollY, 0, 45)
+const translateY = diffClamp.interpolate({
+  inputRange: [0, 45],
+  outputRange: [0, -45],
+})
 
 const Home = () => {
   const context = useContext(Context)
@@ -17,7 +24,9 @@ const Home = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header />
+      <Animated.View style={styles.animatedView}>
+        <Header />
+      </Animated.View>
       {youtubeData.length > 0 ? (
         <FlatList
           data={youtubeData}
@@ -30,6 +39,7 @@ const Home = () => {
             />
           )}
           keyExtractor={(item) => item.id.videoId}
+          onScroll={(e) => scrollY.setValue(e.nativeEvent.contentOffset.y)}
         />
       ) : (
         <View style={styles.center}>
@@ -51,6 +61,14 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  animatedView: {
+    transform: [{ translateY }],
+    elevation: 4,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    left: 0,
   },
 })
 
